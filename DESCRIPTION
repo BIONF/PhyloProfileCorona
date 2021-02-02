@@ -16,7 +16,7 @@ Encoding: UTF-8
 biocViews: Software, Visualization, DataRepresentation, MultipleComparison, FunctionalPrediction
 Imports:
     BiocStyle, DT, colourpicker, energy, ggplot2, shinyBS, 
-    shinyjs, PhyloProfile
+    shinyjs, PhyloProfile (>= 1.4.0)
 RoxygenNote: 7.1.1
 Suggests: 
     knitr, rmarkdown, testthat,
