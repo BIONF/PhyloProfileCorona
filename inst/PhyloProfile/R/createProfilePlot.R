@@ -29,7 +29,7 @@ createProfilePlotUI <- function(id) {
 }
 
 createProfilePlot <- function(input, output, session,
-                                data, 
+                                data,
                               # clusteredDataHeat,
                                 # applyCluster,
                                 parameters,
@@ -67,7 +67,7 @@ createProfilePlot <- function(input, output, session,
             if (inSeq()[1] == "all" & inTaxa()[1] == "all") return()
         }
         withProgress(message = 'PLOTTING...', value = 0.5, {
-            PhyloProfileCorona::highlightProfilePlot(
+            PhyloProfileCorona::highlightProfilePlotCr(
                 dataHeat(),
                 parameters(),
                 taxonHighlight(),
@@ -75,7 +75,7 @@ createProfilePlot <- function(input, output, session,
                 geneHighlight()
             )
         })
-        
+
     })
 
     output$plot.ui <- renderUI({
@@ -103,7 +103,7 @@ createProfilePlot <- function(input, output, session,
         content = function(file) {
             ggsave(
                 file,
-                plot = highlightProfilePlot(
+                plot = PhyloProfileCorona::highlightProfilePlotCr(
                     dataHeat(), parameters(), "none", rankSelect(), "none"
                 ),
 
@@ -116,7 +116,7 @@ createProfilePlot <- function(input, output, session,
     # get info of clicked point on heatmap plot --------------------------------
     selectedpointInfo <- reactive({
         # get selected supertaxon name
-        taxaList <- getNameList()
+        taxaList <- PhyloProfileCorona::getNameListCr()
         rankName <- rankSelect()
         inSelect <- taxaList$ncbiID[taxaList$fullName == inSelect()]
 
@@ -125,7 +125,7 @@ createProfilePlot <- function(input, output, session,
 
         if (typeProfile() == "customizedProfile") {
             # get sub-dataframe of selected taxa and sequences
-            if (is.null(inSeq()[1]) | is.null(inTaxa()[1]))  
+            if (is.null(inSeq()[1]) | is.null(inTaxa()[1]))
                 stop("Subset taxa or genes is NULL!")
             if (inTaxa()[1] == "all" & inSeq()[1] != "all") {
                 # select data from dataHeat for selected sequences only
@@ -143,7 +143,7 @@ createProfilePlot <- function(input, output, session,
             dataHeat$supertaxon <- factor(dataHeat$supertaxon)
             dataHeat$geneID <- factor(dataHeat$geneID)
         }
-        
+
         # get values
         if (is.null(input$plotClick$x)) return()
         else {

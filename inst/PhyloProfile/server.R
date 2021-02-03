@@ -273,8 +273,9 @@ shinyServer(function(input, output, session) {
         req(getMainInput())
         if (rankSelect == "") return()
         withProgress(message = 'Getting input taxon names...', value = 0.5, {
-            inputTaxaName <- 
-                PhyloProfileCorona::getInputTaxaName(rankSelect, inputTaxonID())
+            inputTaxaName <- PhyloProfileCorona::getInputTaxaNameCr(
+              rankSelect, inputTaxonID()
+            )
             return(inputTaxaName)
         })
     })
@@ -290,7 +291,7 @@ shinyServer(function(input, output, session) {
             inputTaxaTree <- read.tree(file = treeIn)
 
             # sort taxonomy matrix based on selected refTaxon
-            sortedOut <- PhyloProfileCorona::sortInputTaxa(
+            sortedOut <- PhyloProfileCorona::sortInputTaxaCr(
                 taxonIDs = inputTaxonID(),
                 rankName = rankSelect,
                 refTaxon = inSelect,
@@ -660,14 +661,6 @@ shinyServer(function(input, output, session) {
             createSelectGene("inSeq", outAll, outAll)
         }
     })
-
-    # * render popup for selecting rank and return list of subset taxa ---------
-    cusTaxaName <- callModule(
-        selectTaxonRank,
-        "selectTaxonRank",
-        rankSelect = reactive(rankSelect),
-        inputTaxonID = inputTaxonID
-    )
 
     # * get list of all taxa for customized profile ----------------------------
     output$taxaIn <- renderUI({
@@ -1080,7 +1073,7 @@ shinyServer(function(input, output, session) {
         # } else {
         #     varList <- as.list(c(var1ID, var2ID, "% present taxa"))
         # }
-        
+
         varList <- as.list(c(var1ID, var2ID))
         selectInput(
             "selectedDist", "Choose variable to plot:", varList, varList[1]
@@ -1191,14 +1184,6 @@ shinyServer(function(input, output, session) {
             multiple = TRUE
         ))
     })
-
-    # ** render popup for selecting group of taxa to find core genes -----------
-    coreTaxaName <- callModule(
-        selectTaxonRank,
-        "selectTaxonRankCore",
-        rankSelect = reactive(rankSelect),
-        inputTaxonID = inputTaxonID
-    )
 
     # ** render table contains list of core genes ------------------------------
     coreGeneDf <- callModule(

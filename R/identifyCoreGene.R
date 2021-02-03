@@ -5,7 +5,7 @@
 #' that criteria must be fullfilled for a certain percentage of selected taxa
 #' or all of them (determined via coreCoverage).
 #' @export
-#' @usage getCoreGene(rankName, taxaCore = c("none"), profileDt, taxaCount,
+#' @usage getCoreGeneCr(rankName, taxaCore = c("none"), profileDt, taxaCount,
 #'     var1Cutoff = c(0, 1), var2Cutoff = c(0, 1), percentCutoff = c(0, 1),
 #'     coreCoverage = 100)
 #' @param rankName working taxonomy rank (e.g. "species", "genus", "family")
@@ -21,10 +21,8 @@
 #' considered. Default = 1.
 #' @return A list of identified core genes.
 #' @author Vinh Tran {tran@bio.uni-frankfurt.de}
-#' @seealso \code{\link{parseInfoProfile}} for creating a full processed
-#' profile dataframe
 
-getCoreGene <- function(
+getCoreGeneCr <- function(
     rankName = NULL, taxaCore = c("none"), profileDt = NULL, taxaCount = NULL,
     var1Cutoff = c(0, 1), var2Cutoff = c(0, 1),
     percentCutoff = c(0, 1), coreCoverage = 100
@@ -34,7 +32,7 @@ getCoreGene <- function(
     if (is.null(rankName)) stop("Rank name cannot be NULL!")
     supertaxonID <- mVar1 <- mVar2 <- presSpec <- Freq <- NULL
     # get ID list of chosen taxa & main input profile
-    taxaList <- PhyloProfileCorona::getNameList()
+    taxaList <- PhyloProfileCorona::getNameListCr()
     if ("none" %in% taxaCore) {
         superID <- NA
     } else superID <- taxaList$ncbiID[

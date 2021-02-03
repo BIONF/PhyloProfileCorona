@@ -10,7 +10,7 @@ shinyUI(
         useShinyjs(),
 
         # Application title
-        titlePanel("", windowTitle = "PhyloProfile"),
+        titlePanel("", windowTitle = "PhyloProfileCorona"),
 
         # TOP WELLPANEL FOR PLOT CONFIGURATION ---------------------------------
         conditionalPanel(

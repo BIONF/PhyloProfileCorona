@@ -1,6 +1,6 @@
 #' Highlight gene and/or taxon of interest on the phylogenetic profile plot
 #' @export
-#' @usage highlightProfilePlot(data, plotParameter = NULL, taxonHighlight =
+#' @usage highlightProfilePlotCr(data, plotParameter = NULL, taxonHighlight =
 #'     "none", rankName = "none", geneHighlight = "none")
 #' @param data dataframe for plotting the heatmap phylogentic profile (either
 #' full or subset profiles)
@@ -25,7 +25,7 @@
 #' @author Vinh Tran {tran@bio.uni-frankfurt.de}
 #' @seealso \code{\link{dataMainPlot}}, \code{\link{dataCustomizedPlot}}
 
-highlightProfilePlot <- function(
+highlightProfilePlotCr <- function(
     data = NULL, plotParameter = NULL, taxonHighlight = "none",
     rankName = "none", geneHighlight = "none"
 ){

@@ -31,7 +31,7 @@ identifyCoreGene <- function(
     })
 
     coreGeneDf <- reactive({
-        coreGeneDf <- PhyloProfileCorona::getCoreGene(
+        coreGeneDf <- PhyloProfileCorona::getCoreGeneCr(
             rankSelect(), taxaCore(), filteredData(), taxaCount(),
             var1Cutoff(), var2Cutoff(), percentCore(), coreCoverage()
         )
