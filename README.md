@@ -37,7 +37,7 @@ Check your web browser, *PhyloProfileCorona* will be displayed there ;-)
 _**Please check our [detailed instructions](https://github.com/BIONF/PhyloProfile/wiki/Installation) if you encounter any problems while installing and starting the program.**_
 
 # Bugs
-Any [bug reports or comments, suggestions](https://github.com/BIONF/PhyloProfile/blob/master/CONTRIBUTING.md) are highly appreciated. Please [open an issue on GitHub](https://github.com/BIONF/PhyloProfile/issues/new) or be in touch via email.
+Any [bug reports or comments, suggestions](https://github.com/BIONF/PhyloProfile/blob/master/CONTRIBUTING.md) are highly appreciated. Please [open an issue on GitHub](https://github.com/BIONF/PhyloProfileCorona/issues/new) or be in touch via email.
 
 # License
 This tool is released under [MIT license](https://github.com/BIONF/PhyloProfile/blob/master/LICENSE).
