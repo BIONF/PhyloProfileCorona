@@ -22,7 +22,7 @@ Then start R to install and use *PhyloProfileCorona*.
 ```r
 if (!requireNamespace("devtools"))
     install.packages("devtools")
-devtools::install_github("trvinh/PhyloProfileCorona", INSTALL_opts = c('--no-lock'))
+devtools::install_github("BIONF/PhyloProfileCorona", INSTALL_opts = c('--no-lock'))
 ```
 
 ## Start PhyloProfileCorona's Shiny app
