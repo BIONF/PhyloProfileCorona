@@ -4,11 +4,8 @@ This is a lite version of [PhyloProfile](https://github.com/BIONF/PhyloProfile),
 
 # Table of Contents
 * [Installation &amp; Usage](#installation--usage)
-* [Input Data](#input-data)
-* [Walkthrough](#walkthrough)
 * [Bugs](#bugs)
-* [Acknowledgements](#acknowledgements)
-* [Code of Conduct &amp; License](#code-of-conduct--license)
+* [License](#license)
 * [Contact](#contact)
 
 # Installation & Usage
