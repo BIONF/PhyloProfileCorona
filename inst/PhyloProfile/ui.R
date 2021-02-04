@@ -295,108 +295,6 @@ shinyUI(
                 )
             ),
 
-            # FUNCTION TAB =====================================================
-            navbarMenu(
-                "Function",
-
-                # * Distribution analysis --------------------------------------
-                tabPanel(
-                    "Distribution analysis",
-                    h4(strong("Distribution analysis")),
-                    bsAlert("descDistributionUI"),
-
-                    wellPanel(
-                        fluidRow(
-                            column(
-                                2,
-                                selectInput(
-                                    "dataset.distribution", "Select data",
-                                    choices = c("Main data", "Customized data"),
-                                    selected = "Main data"
-                                ),
-                                uiOutput("selected.distribution")
-                            ),
-                            column(
-                                2, uiOutput("var1Dist.ui")
-                            ),
-                            column(
-                                2, uiOutput("var2Dist.ui")
-                            ),
-                            column(
-                                2, uiOutput("percentDist.ui")
-                            ),
-                            column(
-                                2,
-                                createTextSize(
-                                    "distTextSize", "Label size", 12, 100
-                                )
-                            ),
-                            column(
-                                2,
-                                createPlotSize(
-                                    "distWidth", "Width (px)", 600
-                                )
-                            )
-                        )
-                    ),
-                    analyzeDistributionUI("distPlot")
-                ),
-
-                # * Core gene identification  ----------------------------------
-                tabPanel(
-                    "Core gene identification",
-                    h4(strong("Core gene identification")),
-                    bsAlert("descCoreGeneUI"),
-
-                    wellPanel(
-                        fluidRow(
-                            column(
-                                3, uiOutput("var1Core.ui")
-                            ),
-                            column(
-                                3, uiOutput("var2Core.ui")
-                            ),
-                            column(
-                                3, uiOutput("percentCore.ui")
-                            ),
-                            column(
-                                3,
-                                sliderInput(
-                                    "coreCoverage",
-                                    "Core taxa coverage",
-                                    min = 0,
-                                    max = 100,
-                                    value = 100,
-                                    step = 5
-                                )
-                            ),
-                            column(
-                                12,
-                                uiOutput("taxaListCore.ui"),
-                                bsButton("browseTaxaCore", "Browse")
-                            )
-                        )
-                    ),
-                    hr(),
-
-                    column(
-                        4,
-                        downloadButton(
-                            "coreGeneTableDownload", "Download gene list"
-                        ),
-                        checkboxInput(
-                            "addCoreGeneCustomProfile",
-                            strong(em("Add core genes to Customized profile",
-                                      style = "color:red")),
-                            value = FALSE,
-                            width = NULL
-                        ),
-                        uiOutput("addCoreGeneCustomProfileCheck.ui")
-                    ),
-                    identifyCoreGeneUI("coreGene")
-                )
-            ),
-
             # DATA DOWNLOAD TAB ================================================
             navbarMenu(
                 "Download filtered data",
@@ -409,22 +307,8 @@ shinyUI(
                 "Help",
                 tabPanel(
                     a(
-                        "Corona data",
-                        href = "https://applbio.biologie.uni-frankfurt.de/download/SARS-CoV-2",
-                        target = "_blank"
-                    )
-                ),
-                tabPanel(
-                    a(
-                        "Wiki",
-                        href = "https://github.com/BIONF/PhyloProfile/wiki",
-                        target = "_blank"
-                    )
-                ),
-                tabPanel(
-                    a(
                         "About",
-                        href = "https://BIONF.github.io/PhyloProfile/",
+                        href = "https://BIONF.github.io/PhyloProfileCorona/",
                         target = "_blank"
                     )
                 )

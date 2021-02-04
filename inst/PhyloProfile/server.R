@@ -86,54 +86,6 @@ shinyServer(function(input, output, session) {
         )
     })
 
-    # * render filter slidebars for Distribution plot --------------------------
-    output$var1Dist.ui <- renderUI({
-        createSliderCutoff(
-            "var1Dist",
-            paste(var1ID, "cutoff:"),
-            input$var1[1], input$var1[2], var1ID
-        )
-    })
-
-    output$var2Dist.ui <- renderUI({
-        createSliderCutoff(
-            "var2Dist",
-            paste(var2ID, "cutoff:"),
-            input$var2[1], input$var2[2], var2ID
-        )
-    })
-
-    output$percentDist.ui <- renderUI({
-        createSliderCutoff(
-            "percentDist",
-            "% of present taxa:",
-            input$percent[1], input$percent[2], "percent"
-        )
-    })
-
-    # * render filter slidebars for Core gene finding function -----------------
-    output$var1Core.ui <- renderUI({
-        createSliderCutoff(
-            "var1Core", paste(var1ID, "cutoff:"), 0.0, 1.0,
-            var1ID
-        )
-    })
-
-    output$var2Core.ui <- renderUI({
-        createSliderCutoff(
-            "var2Core", paste(var2ID, "cutoff:"), 0.0, 1.0,
-            var2ID
-        )
-    })
-
-    output$percentCore.ui <- renderUI({
-        createSliderCutoff(
-            "percentCore",
-            "% of present taxa:",
-            0, 1, "percent"
-        )
-    })
-
     # * update value for filter slidebars of Main Plot -------------------------
     # ** based on customized profile
     observe({
@@ -166,31 +118,6 @@ shinyServer(function(input, output, session) {
             session,
             "coortholog",
             value = newCoortholog
-        )
-    })
-
-    # ** based on "Distribution analysis"
-    observe({
-        newVar1 <- input$var1Dist
-        updateSliderCutoff(
-            session,
-            "var1", paste(var1ID, "cutoff:"), newVar1, var1ID
-        )
-    })
-
-    observe({
-        newVar2 <- input$var2Dist
-        updateSliderCutoff(
-            session,
-            "var2", paste(var2ID, "cutoff:"), newVar2, var2ID
-        )
-    })
-
-    observe({
-        newPercent <- input$percentDist
-        updateSliderCutoff(
-            session,
-            "percent", "% of present taxa:", newPercent, "percent"
         )
     })
 
@@ -644,16 +571,12 @@ shinyServer(function(input, output, session) {
         fileCustom <- input$customFile
         data <- getFullData()
         outAll <- c("all", as.list(levels(factor(data$geneID))))
-        if (input$addCoreGeneCustomProfile == TRUE) {
-            outAll <- as.list(coreGeneDf())
-        } else {
-            if (!is.null(fileCustom)) {
-                customList <- read.table(
-                    file = fileCustom$datapath, header = FALSE
-                )
-                customList$V1 <- as.factor(customList$V1)
-                outAll <- as.list(levels(customList$V1))
-            }
+        if (!is.null(fileCustom)) {
+            customList <- read.table(
+                file = fileCustom$datapath, header = FALSE
+            )
+            customList$V1 <- as.factor(customList$V1)
+            outAll <- as.list(levels(customList$V1))
         }
         if (outAll[1] == "all") {
             createSelectGene("inSeq", outAll, "all")
@@ -1042,172 +965,5 @@ shinyServer(function(input, output, session) {
         fasta = customizedFastaDownload,
         inSeq = reactive(input$inSeq),
         inTaxa = reactive(input$inTaxa)
-    )
-
-    # ============================ ANALYSIS FUNCTIONS ==========================
-
-    # * DISTRIBUTION ANALYSIS ==================================================
-    # ** description for distribution analysis function ------------------------
-    observe({
-        desc = paste(
-            "Plot the distributions of the values incurred by the integrated
-            information layers."
-        )
-
-        if (input$tabs == "Distribution analysis") {
-            createAlert(
-                session, "descDistributionUI", "descDistribution",
-                content = desc, append = FALSE
-            )
-        }
-    })
-
-    # ** list of available variables for distribution plot ---------------------
-    output$selected.distribution <- renderUI({
-        # if (nchar(var1ID) == 0 & nchar(var2ID) == 0) {
-        #     varList <- "% present taxa"
-        # } else if (nchar(var1ID) == 0 & nchar(var2ID) > 0) {
-        #     varList <- as.list(c(var2ID, "% present taxa"))
-        # } else if (nchar(var1ID) > 0 & nchar(var2ID) == 0) {
-        #     varList <- as.list(c(var1ID, "% present taxa"))
-        # } else {
-        #     varList <- as.list(c(var1ID, var2ID, "% present taxa"))
-        # }
-
-        varList <- as.list(c(var1ID, var2ID))
-        selectInput(
-            "selectedDist", "Choose variable to plot:", varList, varList[1]
-        )
-    })
-
-    # ** var1 / var2 distribution data -----------------------------------------
-    distributionDf <- reactive({
-        withProgress(message = 'Getting data for analyzing...', value = 0.5, {
-            splitDt <- createVariableDistributionData(
-                getMainInput(), input$var1, input$var2
-            )
-            # filter data base on customized plot (if chosen)
-            if (input$dataset.distribution == "Customized data") {
-                req(input$inSeq)
-                splitDt <- createVariableDistributionDataSubset(
-                    getFullData(),
-                    splitDt,
-                    input$inSeq,
-                    input$inTaxa
-                )
-            }
-            # return dt
-            return(splitDt)
-        })
-    })
-
-    # ** render distribution plots ---------------------------------------------
-    observe({
-        # req(v$doPlot)
-        req(input$selectedDist)
-
-        if (input$selectedDist == "% present taxa") {
-            callModule(
-                analyzeDistribution, "distPlot",
-                data = reactive(
-                    createPercentageDistributionData(
-                        getMainInput(), rankSelect
-                    )
-                ),
-                varID = reactive(input$selectedDist),
-                varType = reactive("presSpec"),
-                percent = reactive(input$percent),
-                distTextSize = reactive(input$distTextSize),
-                distWidth = reactive(input$distWidth)
-            )
-        } else {
-            if (input$selectedDist == var1ID) {
-                callModule(
-                    analyzeDistribution, "distPlot",
-                    data = distributionDf,
-                    varID = reactive(input$selectedDist),
-                    varType = reactive("var1"),
-                    percent = reactive(input$percent),
-                    distTextSize = reactive(input$distTextSize),
-                    distWidth = reactive(input$distWidth)
-                )
-            } else if (input$selectedDist == var2ID) {
-                callModule(
-                    analyzeDistribution, "distPlot",
-                    data = distributionDf,
-                    varID = reactive(input$selectedDist),
-                    varType = reactive("var2"),
-                    percent = reactive(input$percent),
-                    distTextSize = reactive(input$distTextSize),
-                    distWidth = reactive(input$distWidth)
-                )
-            }
-        }
-    })
-
-    # * CORE GENES IDENTIFICATION ==============================================
-    # ** description for core gene identification function ---------------------
-    observe({
-        desc = paste(
-            "IDENTIFY GENES THAT ARE SHARED AMONG SELECTED TAXA.",
-            "You can set the minimal taxa that should be taken into
-            account by using the \"Core taxa coverage\" cutoff.",
-            "If you are working with a taxonomy level (e.g. Family)
-            that is higher than the one in the input profile (e.g.
-            Species), you can also identify a minimal fragtion of species
-            that need to have an ortholog in each supertaxon with
-            \"% of present taxa\" cutoff. WARNING: You should set the cutoffs
-            before selecting taxa of interest!"
-        )
-
-        if (input$tabs == "Core gene identification") {
-            createAlert(
-                session, "descCoreGeneUI", "descCoreGene",
-                title = "", content = desc, append = FALSE
-            )
-        }
-    })
-
-    # ** render list of available taxa -----------------------------------------
-    output$taxaListCore.ui <- renderUI({
-        filein <- mainInput
-        choice <- inputTaxonName()
-        choice$fullName <- as.factor(choice$fullName)
-
-        out <- as.list(levels(choice$fullName))
-        out <- append("none", out)
-        return(selectInput(
-            "taxaCore",
-            "Select taxa of interest:",
-            out,
-            selected = out[1],
-            multiple = TRUE
-        ))
-    })
-
-    # ** render table contains list of core genes ------------------------------
-    coreGeneDf <- callModule(
-        identifyCoreGene,
-        "coreGene",
-        filteredData = getFullData,
-        taxaCount = getCountTaxa,
-        rankSelect = reactive(rankSelect),
-        taxaCore = reactive(input$taxaCore),
-        percentCore = reactive(input$percentCore),
-        var1Cutoff = reactive(input$var1Core),
-        var2Cutoff = reactive(input$var2Core),
-        coreCoverage = reactive(input$coreCoverage)
-    )
-
-    # ** download gene list from coreGene.table -------------------------------
-    output$coreGeneTableDownload <- downloadHandler(
-        filename = function() {
-            c("coreGeneList.out")
-        },
-        content = function(file) {
-            dataOut <- coreGeneDf()
-            write.table(dataOut, file, sep = "\t", row.names = FALSE,
-                        quote = FALSE)
-        }
     )
 })
