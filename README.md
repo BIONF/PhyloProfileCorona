@@ -9,7 +9,8 @@ This is a lite version of [PhyloProfile](https://github.com/BIONF/PhyloProfile),
 * [License](#license)
 * [Contact](#contact)
 
-![](https://github.com/BIONF/PhyloProfileCorona/blob/gh-pages/www/phyloprofile_interface.png)
+<!-- ![](https://github.com/BIONF/PhyloProfileCorona/blob/gh-pages/www/phyloprofile_interface.png) -->
+![](phyloprofile_interface.png)
 
 # Usage
 Feature-aware phylogenetic profile of the SARS-CoV-2 protein set (GCF_009858895.2) across the Coronaviridae family.
